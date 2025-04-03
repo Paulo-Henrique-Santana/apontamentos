@@ -1,15 +1,15 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 @Table({
-  tableName: 'Usuarios',
-  modelName: 'Usuario'
+  tableName: 'Users',
+  modelName: 'User'
 })
-export class Usuario extends Model {
+export class User extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: false
   })
-  nome!: string;
+  name!: string;
 
   @Column({
     type: DataType.STRING,
@@ -21,5 +21,5 @@ export class Usuario extends Model {
     type: DataType.STRING,
     allowNull: false
   })
-  senha!: string;
+  password!: string;
 }
