@@ -4,3 +4,12 @@ export interface User {
   email: string;
   password: string;
 }
+
+export interface UserAuth {
+  email: string;
+  password: string;
+}
+
+export interface UserAuthResponse {
+  token: string;
+}

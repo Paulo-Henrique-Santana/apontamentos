@@ -1,4 +1,36 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  height: 100vh;
+  background-color: #282c34;
+  
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.card-form {
+  padding: 1rem;
+  width: 100vw;
+  max-width: 400px;
+
+  mat-card-header {
+    display: flex;
+    justify-content: center;
+
+    mat-card-title {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+}
