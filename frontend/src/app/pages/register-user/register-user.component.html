@@ -1,0 +1,74 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Cadastre-se</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="form">
+      <mat-form-field>
+        <mat-label>Nome</mat-label>
+        <input matInput autocomplete="name" formControlName="name" />
+        <mat-error>
+          <app-field-error [control]="form.controls['name']"></app-field-error>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>E-mail</mat-label>
+        <input matInput autocomplete="e-mail" formControlName="email" />
+        <mat-error>
+          <app-field-error [control]="form.controls['email']"></app-field-error>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Senha</mat-label>
+        <input
+          matInput
+          [type]="hideValue.password ? 'password' : 'text'"
+          formControlName="password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="toggleHidePassword('password')"
+        >
+          <mat-icon>{{
+            hideValue.password ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+        <mat-error>
+          <app-field-error
+            [control]="form.controls['password']"
+          ></app-field-error>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Confirmar Senha</mat-label>
+        <input
+          matInput
+          [type]="hideValue.confirmPassword ? 'password' : 'text'"
+          formControlName="confirmPassword"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="toggleHidePassword('confirmPassword')"
+        >
+          <mat-icon>{{
+            hideValue.confirmPassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+        <mat-error>
+          <app-field-error
+            [control]="form.controls['confirmPassword']"
+            [errors]="errorsConfirmPassword"
+          ></app-field-error>
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-flat-button (click)="register()">Cadastrar</button>
+    </form>
+  </mat-card-content>
+</mat-card>
