@@ -10,7 +10,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'register',
+    path: 'cadastro',
     loadComponent: () =>
       import('./pages/register-user/register-user.component').then(
         (m) => m.RegisterUserComponent

@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterLink } from '@angular/router';
 import { FieldErrorComponent } from '../../components/field-error/field-error.component';
 import { UserAuth } from '../../models/user';
 import { UserService } from '../../services/user.service';
@@ -20,6 +21,7 @@ import { UserService } from '../../services/user.service';
     MatButtonModule,
     ReactiveFormsModule,
     FieldErrorComponent,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

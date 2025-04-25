@@ -10,6 +10,11 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+a {
+  text-decoration: none;
+  color: var(--mat-sys-primary);
+}
+
 .card-form {
   padding: 1rem;
   width: 100vw;
