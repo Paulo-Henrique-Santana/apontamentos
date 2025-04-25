@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FieldErrorComponent } from '../../components/field-error/field-error.component';
 import { UserAuth } from '../../models/user';
 import { UserService } from '../../services/user.service';
@@ -30,6 +30,7 @@ export class LoginComponent {
   fb = inject(FormBuilder);
   userSerivce = inject(UserService);
   snackBar = inject(MatSnackBar);
+  router = inject(Router);
 
   hideValue = {
     password: true,
@@ -53,6 +54,8 @@ export class LoginComponent {
           this.snackBar.open('Login efetuado com sucesso!', 'Fechar', {
             duration: 5000,
           });
+
+          this.router.navigate(['/projetos']);
         },
       });
     }
