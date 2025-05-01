@@ -15,4 +15,8 @@ export class ProjectsService {
   get() {
     return this.http.get<ApiGetList<Project>>(this.url);
   }
+
+  delete(id: number) {
+    return this.http.delete<void>(`${this.url}/${id}`);
+  }
 }
