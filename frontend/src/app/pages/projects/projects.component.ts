@@ -48,6 +48,7 @@ export class ProjectsComponent implements OnInit {
     this.projectsService.delete(project.id!).subscribe({
       next: () => {
         this.projects = this.projects.filter((p) => p.id !== project.id);
+        
         this.snackBar.open('Projeto deletado com sucesso!', 'Fechar', {
           duration: 5000,
         });
