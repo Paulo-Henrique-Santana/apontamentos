@@ -6,5 +6,6 @@ const projectRouter = Router();
 projectRouter.get("/", projectController.getProjects);
 projectRouter.delete("/:id", projectController.deleteProject);
 projectRouter.post("/", projectController.createProject);
+projectRouter.put("/:id", projectController.updateProject);
 
 export default projectRouter;

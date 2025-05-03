@@ -23,4 +23,8 @@ export class ProjectsService {
   create(body: Project) {
     return this.http.post<Project>(this.url, body);
   }
+
+  update(body: Project) {
+    return this.http.put<Project>(`${this.url}/${body.id}`, body);
+  }
 }

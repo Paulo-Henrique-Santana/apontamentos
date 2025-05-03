@@ -29,11 +29,11 @@
   </table>
 </div>
 
-<button mat-flat-button class="btn-add-project" (click)="openDialogAddProject()">Cadastrar projeto</button>
+<button mat-flat-button class="btn-add-project" (click)="openCreateDialog()">Cadastrar projeto</button>
 
 <mat-menu #menu="matMenu">
   <ng-template matMenuContent let-project="project">
-    <button mat-menu-item>
+    <button mat-menu-item (click)="openEditDialog(project)">
       <mat-icon>edit</mat-icon>
       <span>Editar</span>
     </button>

@@ -5,8 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { DialogAddProjectComponent } from '../../components/dialog-add-project/dialog-add-project.component';
 import { DialogDeleteProjectComponent } from '../../components/dialog-delete-project/dialog-delete-project.component';
+import { DialogFormProjectComponent } from '../../components/dialog-form-project/dialog-form-project.component';
+import { DialogFormProjectData } from '../../models/dialog-form-project-data';
 import { Project } from '../../models/project';
 import { ProjectsService } from '../../services/projects.service';
 
@@ -51,7 +52,7 @@ export class ProjectsComponent implements OnInit {
     this.projectsService.delete(project.id!).subscribe({
       next: () => {
         this.projects = this.projects.filter((p) => p.id !== project.id);
-        
+
         this.snackBar.open('Projeto deletado com sucesso!', 'Fechar', {
           duration: 5000,
         });
@@ -59,8 +60,14 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  openDialogAddProject() {
-    const dialogRef = this.dialog.open(DialogAddProjectComponent);
+  openCreateDialog() {
+    const dialogData: DialogFormProjectData = {
+      title: 'Cadastro de projeto',
+      txtBtnSubmit: 'Cadastrar',
+    };
+    const dialogRef = this.dialog.open(DialogFormProjectComponent, {
+      data: dialogData,
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -76,6 +83,37 @@ export class ProjectsComponent implements OnInit {
         this.table.renderRows();
 
         this.snackBar.open('Projeto cadastrado com sucesso!', 'Fechar', {
+          duration: 5000,
+        });
+      },
+    });
+  }
+
+  openEditDialog(project: Project) {
+    const dialogData: DialogFormProjectData = {
+      title: 'Edição de projeto',
+      txtBtnSubmit: 'Salvar',
+      project: project,
+    };
+    const dialogRef = this.dialog.open(DialogFormProjectComponent, {
+      data: dialogData,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.editProject({ id: project.id, ...result });
+      }
+    });
+  }
+
+  editProject(project: Project) {
+    this.projectsService.update(project).subscribe({
+      next: (res) => {
+        const index = this.projects.findIndex((p) => p.id === res.id);
+        this.projects[index] = res;
+        this.table.renderRows();
+
+        this.snackBar.open('Projeto editado com sucesso!', 'Fechar', {
           duration: 5000,
         });
       },

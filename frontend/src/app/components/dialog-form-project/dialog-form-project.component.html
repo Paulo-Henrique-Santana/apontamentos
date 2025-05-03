@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Cadastro de projeto</h2>
+<h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content>
   <mat-form-field [formGroup]="form">
     <mat-label>Nome</mat-label>
@@ -16,6 +16,6 @@
     cdkFocusInitial
     [disabled]="form.invalid"
   >
-    Cadastrar
+    {{ data.txtBtnSubmit }}
   </button>
 </mat-dialog-actions>
