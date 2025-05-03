@@ -19,4 +19,8 @@ export class ProjectsService {
   delete(id: number) {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
+
+  create(body: Project) {
+    return this.http.post<Project>(this.url, body);
+  }
 }
