@@ -22,6 +22,5 @@ export const routes: Routes = [
       import('./pages/projects/projects.component').then(
         (m) => m.ProjectsComponent
       ),
-    data: { hideToolbar: true },
   },
 ];

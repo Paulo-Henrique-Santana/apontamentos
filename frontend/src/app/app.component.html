@@ -1,1 +1,30 @@
-<router-outlet></router-outlet>
+@if (showToolbar) {
+<mat-toolbar>
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with menu icon"
+    (click)="snav.toggle()"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Apontamentos</span>
+</mat-toolbar>
+}
+
+<mat-sidenav-container>
+  <mat-sidenav #snav mode="over" fixedTopGap="56">
+    <mat-nav-list>
+      @for (menu of menus; track menu) {
+      <a mat-list-item [routerLink]="menu.route" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>{{ menu.icon }}</mat-icon>
+        {{ menu.name }}
+      </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
