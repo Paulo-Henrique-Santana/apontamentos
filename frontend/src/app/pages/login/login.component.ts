@@ -48,9 +48,7 @@ export class LoginComponent {
   login() {
     if (this.form.valid) {
       this.userSerivce.auth(this.form.value as UserAuth).subscribe({
-        next: (res) => {
-          localStorage.setItem('token', res.token);
-
+        next: () => {
           this.snackBar.open('Login efetuado com sucesso!', 'Fechar', {
             duration: 5000,
           });
