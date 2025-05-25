@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { TimeEntrie } from './TimeEntrie';
 
 @Table({
   tableName: 'Users',
@@ -23,4 +24,7 @@ export class User extends Model {
     allowNull: false
   })
   password!: string;
+
+  @HasMany(() => TimeEntrie)
+  timeEntries?: TimeEntrie[];
 }

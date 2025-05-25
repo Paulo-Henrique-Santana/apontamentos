@@ -31,7 +31,10 @@ export class AppComponent {
 
   showToolbar = false;
 
-  menus = [{ name: 'Projetos', icon: 'assignment', route: '/projetos' }];
+  menus = [
+    { name: 'Projetos', icon: 'assignment', route: '/projetos' },
+    { name: 'Apontamentos', icon: 'schedule', route: '/apontamentos' },
+  ];
 
   constructor() {
     this.router.events

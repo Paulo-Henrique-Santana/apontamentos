@@ -25,5 +25,13 @@ export const routes: Routes = [
         (m) => m.ProjectsComponent
       ),
   },
+  {
+    path: 'apontamentos',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/time-tracking/time-tracking.component').then(
+        (m) => m.TimeTrackingComponent
+      ),
+  },
   { path: '**', redirectTo: 'projetos' }
 ];

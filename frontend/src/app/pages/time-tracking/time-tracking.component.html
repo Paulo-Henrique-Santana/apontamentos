@@ -1,0 +1,54 @@
+<h1>Apontamentos</h1>
+
+<div class="container">
+  <table mat-table [dataSource]="timeEntries">
+    <ng-container matColumnDef="project">
+      <th mat-header-cell *matHeaderCellDef>Projeto</th>
+      <td mat-cell *matCellDef="let element">{{ element.project.name }}</td>
+    </ng-container>
+
+    @for (day of weekDays; track $index) {
+    <ng-container [matColumnDef]="day.label">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ day.label }} {{ day.date | date : "dd/MM" }}
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element[day.label] }}</td>
+    </ng-container>
+    }
+
+    <ng-container matColumnDef="actions" stickyEnd>
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          [matMenuTriggerData]="{ project: element }"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <tr class="no-data-row" *matNoDataRow>
+      <td class="cell-no-data">Nenhum projeto cadastrado</td>
+    </tr>
+  </table>
+</div>
+
+<button mat-flat-button class="btn-add-project">Cadastrar projeto</button>
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-project="project">
+    <button mat-menu-item>
+      <mat-icon>edit</mat-icon>
+      <span>Editar</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>delete</mat-icon>
+      <span>Excluir</span>
+    </button>
+  </ng-template>
+</mat-menu>
