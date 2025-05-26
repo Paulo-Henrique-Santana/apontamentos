@@ -5,9 +5,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTable, MatTableModule } from '@angular/material/table';
+import { DateControlComponent } from '../../components/date-control/date-control.component';
 import { Project } from '../../models/project';
 import { TimeEntrieParams } from '../../models/time-entries';
 import { TimeEntrieService } from '../../services/time-entrie.service';
+import { DateUtils } from '../../utils/date-utils';
 
 @Component({
   selector: 'app-time-tracking',
@@ -18,6 +20,7 @@ import { TimeEntrieService } from '../../services/time-entrie.service';
     MatButtonModule,
     DatePipe,
     MatInputModule,
+    DateControlComponent,
   ],
   templateUrl: './time-tracking.component.html',
   styleUrl: './time-tracking.component.scss',
@@ -30,32 +33,28 @@ export class TimeTrackingComponent {
   timeEntries: any[] = [];
 
   weekLabels: string[] = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-  weekDays: { label: string; date: string }[] = [];
+  weekDays: { label: string; date: Date }[] = [];
 
   displayedColumns: string[] = ['project'];
 
   constructor() {
-    this.weekDays = this.getWeekDays();
+    this.weekDays = this.getWeekDays(new Date());
     this.displayedColumns = [...this.displayedColumns, ...this.weekLabels];
     this.getTimeEntries();
   }
 
-  getWeekDays(): { label: string; date: string }[] {
-    const today = new Date();
-    const sunday = new Date(today);
-    sunday.setDate(today.getDate() - today.getDay());
+  getWeekDays(date: Date): { label: string; date: Date }[] {
+    date.setDate(date.getDate() - date.getDay());
 
     const weekDays = [];
 
     for (let i = 0; i < 7; i++) {
-      const current = new Date(sunday);
-      current.setDate(sunday.getDate() + i);
-
-      const isoDate = current.toISOString().split('T')[0];
+      const current = new Date(date);
+      current.setDate(date.getDate() + i);
 
       weekDays.push({
         label: this.weekLabels[i],
-        date: `${isoDate}`,
+        date: current,
       });
     }
 
@@ -64,8 +63,8 @@ export class TimeTrackingComponent {
 
   getTimeEntries() {
     const params: TimeEntrieParams = {
-      startDate: this.weekDays[0].date,
-      endDate: this.weekDays[6].date,
+      startDate: DateUtils.dateToString(this.weekDays[0].date),
+      endDate: DateUtils.dateToString(this.weekDays[6].date),
     };
 
     this.timeEntrieService.get(params).subscribe({
@@ -74,8 +73,8 @@ export class TimeTrackingComponent {
           const indexProject = this.timeEntries.findIndex(
             (i) => i.project.id === item.project.id
           );
-          const labelDate = this.weekDays.find(
-            (item) => item.date === item.date
+          const labelDate = this.weekDays.find((weekDay) =>
+            DateUtils.isSameDate(weekDay.date, item.date)
           )!.label;
 
           if (indexProject === -1) {
@@ -91,5 +90,28 @@ export class TimeTrackingComponent {
         });
       },
     });
+  }
+
+  nextWeek() {
+    const nextSunday = this.weekDays[this.weekDays.length - 1].date;
+    nextSunday.setDate(nextSunday.getDate() + 1);
+    this.changeWeek(nextSunday);
+  }
+
+  lastWeek() {
+    const lastSaturday = this.weekDays[0].date;
+    lastSaturday.setDate(lastSaturday.getDate() - 1);
+    this.changeWeek(lastSaturday);
+  }
+
+  currentWeek() {
+    const currentDate = new Date();
+    this.changeWeek(currentDate);
+  }
+
+  changeWeek(date: Date) {
+    this.weekDays = this.getWeekDays(date);
+    this.timeEntries = [];
+    this.getTimeEntries();
   }
 }
