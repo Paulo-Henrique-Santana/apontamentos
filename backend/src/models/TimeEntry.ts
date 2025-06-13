@@ -4,9 +4,9 @@ import { User } from './User';
 
 @Table({
   tableName: 'TimeEntries',
-  modelName: 'TimeEntrie'
+  modelName: 'TimeEntry'
 })
-export class TimeEntrie extends Model {
+export class TimeEntry extends Model {
   @Column({
     type: DataType.DATEONLY,
     allowNull: false

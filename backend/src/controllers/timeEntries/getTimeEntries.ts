@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Op, WhereOptions } from "sequelize";
 import { Project } from "../../models/Project";
-import { TimeEntrie } from "../../models/TimeEntrie";
+import { TimeEntry } from "../../models/TimeEntry";
 
 export const getTimeEntries = async (req: Request, res: Response) => {
   try {
@@ -19,7 +19,7 @@ export const getTimeEntries = async (req: Request, res: Response) => {
       };
     }
 
-    const { rows, count } = await TimeEntrie.findAndCountAll({
+    const { rows, count } = await TimeEntry.findAndCountAll({
       where,
       limit: pageSize,
       offset: (page - 1) * pageSize,

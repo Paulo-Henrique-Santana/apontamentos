@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -7,8 +8,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { DateControlComponent } from '../../components/date-control/date-control.component';
 import { Project } from '../../models/project';
-import { TimeEntrieParams } from '../../models/time-entries';
-import { TimeEntrieService } from '../../services/time-entrie.service';
+import { TimeEntry, TimeEntryParams } from '../../models/time-entries';
+import { TimeTrackingItemTable } from '../../models/time-tracking';
+import { TimeEntryService } from '../../services/time-entry.service';
 import { DateUtils } from '../../utils/date-utils';
 
 @Component({
@@ -21,6 +23,7 @@ import { DateUtils } from '../../utils/date-utils';
     DatePipe,
     MatInputModule,
     DateControlComponent,
+    FormsModule,
   ],
   templateUrl: './time-tracking.component.html',
   styleUrl: './time-tracking.component.scss',
@@ -28,18 +31,30 @@ import { DateUtils } from '../../utils/date-utils';
 export class TimeTrackingComponent {
   @ViewChild(MatTable) table!: MatTable<Project>;
 
-  timeEntrieService = inject(TimeEntrieService);
+  timeEntryService = inject(TimeEntryService);
 
-  timeEntries: any[] = [];
+  timeEntries: TimeTrackingItemTable[] = [];
 
-  weekLabels: string[] = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
   weekDays: { label: string; date: Date }[] = [];
 
+  weekColumns = [
+    { property: 'dom', label: 'Dom' },
+    { property: 'seg', label: 'Seg' },
+    { property: 'ter', label: 'Ter' },
+    { property: 'qua', label: 'Qua' },
+    { property: 'qui', label: 'Qui' },
+    { property: 'sex', label: 'Sex' },
+    { property: 'sab', label: 'Sáb' },
+  ];
   displayedColumns: string[] = ['project'];
+
+  get weekProperties() {
+    return this.weekColumns.map((column) => column.property);
+  }
 
   constructor() {
     this.weekDays = this.getWeekDays(new Date());
-    this.displayedColumns = [...this.displayedColumns, ...this.weekLabels];
+    this.displayedColumns = [...this.displayedColumns, ...this.weekProperties];
     this.getTimeEntries();
   }
 
@@ -53,7 +68,7 @@ export class TimeTrackingComponent {
       current.setDate(date.getDate() + i);
 
       weekDays.push({
-        label: this.weekLabels[i],
+        label: this.weekProperties[i],
         date: current,
       });
     }
@@ -62,34 +77,40 @@ export class TimeTrackingComponent {
   }
 
   getTimeEntries() {
-    const params: TimeEntrieParams = {
+    const params: TimeEntryParams = {
       startDate: DateUtils.dateToString(this.weekDays[0].date),
       endDate: DateUtils.dateToString(this.weekDays[6].date),
     };
 
-    this.timeEntrieService.get(params).subscribe({
+    this.timeEntryService.get(params).subscribe({
       next: (res) => {
-        res.items.forEach((item) => {
-          const indexProject = this.timeEntries.findIndex(
-            (i) => i.project.id === item.project.id
-          );
-          const labelDate = this.weekDays.find((weekDay) =>
-            DateUtils.isSameDate(weekDay.date, item.date)
-          )!.label;
-
-          if (indexProject === -1) {
-            this.timeEntries.push({
-              project: item.project,
-              [labelDate]: item.hours,
-            });
-          } else {
-            this.timeEntries[indexProject][item.date] = item.hours;
-          }
-
-          this.table.renderRows();
-        });
+        this.addTimeEntriesToTable(res.items);
       },
     });
+  }
+
+  addTimeEntriesToTable(timeEntries: TimeEntry[]) {
+    timeEntries.forEach((item) => {
+      const indexProject = this.timeEntries.findIndex(
+        (i) => i.project.id === item.project.id
+      );
+      const labelDate = this.weekDays.find((weekDay) =>
+        DateUtils.isSameDate(weekDay.date, item.date)
+      )!.label;
+
+      if (indexProject === -1) {
+        this.timeEntries.push({
+          project: item.project,
+          [labelDate]: item.hours,
+        });
+      } else {
+        Object.assign(this.timeEntries[indexProject], {
+          [labelDate]: item.hours,
+        });
+      }
+    });
+
+    this.table.renderRows();
   }
 
   nextWeek() {

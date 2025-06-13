@@ -20,9 +20,17 @@
     @for (day of weekDays; track $index) {
     <ng-container [matColumnDef]="day.label">
       <th mat-header-cell *matHeaderCellDef>
-        {{ day.label }} {{ day.date | date : "dd/MM" }}
+        {{ weekColumns[$index].label }} {{ day.date | date : "dd/MM" }}
       </th>
-      <td mat-cell *matCellDef="let element">{{ element[day.label] }}</td>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field>
+          <input
+            matInput
+            type="number"
+            [value]="element[day.label]"
+          />
+        </mat-form-field>
+      </td>
     </ng-container>
     }
 

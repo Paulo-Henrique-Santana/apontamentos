@@ -1,7 +1,7 @@
 import { Project } from "./project";
 import { User } from "./user";
 
-export interface TimeEntrie {
+export interface TimeEntry {
   id?: number;
   date: string;
   hours: string;
@@ -12,7 +12,7 @@ export interface TimeEntrie {
   updatedAt: string;
 }
 
-export interface TimeEntrieParams {
+export interface TimeEntryParams {
   startDate?: string;
   endDate?: string;
 }
