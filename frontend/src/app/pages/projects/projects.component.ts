@@ -9,7 +9,7 @@ import { DialogDeleteProjectComponent } from '../../components/dialog-delete-pro
 import { DialogFormProjectComponent } from '../../components/dialog-form-project/dialog-form-project.component';
 import { DialogFormProjectData } from '../../models/dialog-form-project-data';
 import { Project } from '../../models/project';
-import { ProjectsService } from '../../services/projects.service';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-projects',
@@ -20,7 +20,7 @@ import { ProjectsService } from '../../services/projects.service';
 export class ProjectsComponent implements OnInit {
   @ViewChild(MatTable) table!: MatTable<Project>;
 
-  projectsService = inject(ProjectsService);
+  projectsService = inject(ProjectService);
   snackBar = inject(MatSnackBar);
   dialog = inject(MatDialog);
 

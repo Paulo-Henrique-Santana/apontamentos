@@ -8,7 +8,7 @@
       (today)="currentWeek()"
     ></app-date-control>
 
-    <button mat-fab extended class="btn-add-project">Selecionar projeto</button>
+    <button mat-fab extended class="btn-add-project" (click)="openSelectProjectsDialog()">Selecionar projeto</button>
   </div>
 
   <table mat-table [dataSource]="timeEntries">

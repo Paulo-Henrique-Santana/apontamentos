@@ -2,11 +2,13 @@ import { DatePipe } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { DateControlComponent } from '../../components/date-control/date-control.component';
+import { DialogSelectProjectComponent } from '../../components/dialog-select-project/dialog-select-project.component';
 import { Project } from '../../models/project';
 import { TimeEntry, TimeEntryParams } from '../../models/time-entries';
 import { TimeTrackingItemTable } from '../../models/time-tracking';
@@ -32,6 +34,7 @@ export class TimeTrackingComponent {
   @ViewChild(MatTable) table!: MatTable<Project>;
 
   timeEntryService = inject(TimeEntryService);
+  dialog = inject(MatDialog);
 
   timeEntries: TimeTrackingItemTable[] = [];
 
@@ -134,5 +137,36 @@ export class TimeTrackingComponent {
     this.weekDays = this.getWeekDays(date);
     this.timeEntries = [];
     this.getTimeEntries();
+  }
+
+  openSelectProjectsDialog() {
+    const dialogRef = this.dialog.open(DialogSelectProjectComponent, {
+      data: {
+        selectedProjects: this.timeEntries.map((item) => item.project),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((projects: Project[] | undefined) => {
+      if (projects) {
+        this.onSelectProjects(projects);
+      }
+    });
+  }
+
+  onSelectProjects(projects: Project[]) {
+    const projectsWithTimeEntries = this.timeEntries.filter((item) =>
+      this.weekDays.some((weekDay) => item[weekDay.label as keyof typeof item])
+    );
+    const unlistedProjects = projects.filter((project) =>
+      this.timeEntries.every((item) => item.project.id !== project.id)
+    );
+    const newRows: TimeTrackingItemTable[] = unlistedProjects.map(
+      (project) => ({
+        project,
+      })
+    );
+
+    this.timeEntries = [...projectsWithTimeEntries, ...newRows];
+    this.table.renderRows();
   }
 }
