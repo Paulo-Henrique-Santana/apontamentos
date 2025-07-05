@@ -14,10 +14,10 @@ export class TimeEntry extends Model {
   date!: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.DECIMAL(3, 1),
     allowNull: false,
   })
-  hours!: string;
+  hours!: number;
 
   @Column({
     type: DataType.TEXT,

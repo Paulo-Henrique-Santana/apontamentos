@@ -11,8 +11,12 @@ import { DateControlComponent } from '../../components/date-control/date-control
 import { DialogSelectProjectComponent } from '../../components/dialog-select-project/dialog-select-project.component';
 import { Project } from '../../models/project';
 import { TimeEntry, TimeEntryParams } from '../../models/time-entries';
-import { TimeTrackingItemTable } from '../../models/time-tracking';
+import {
+  TimeTrackingItemTable,
+  TimeTrackingWeekDay,
+} from '../../models/time-tracking';
 import { TimeEntryService } from '../../services/time-entry.service';
+import { UserService } from '../../services/user.service';
 import { DateUtils } from '../../utils/date-utils';
 
 @Component({
@@ -35,10 +39,11 @@ export class TimeTrackingComponent {
 
   timeEntryService = inject(TimeEntryService);
   dialog = inject(MatDialog);
+  userService = inject(UserService);
 
   timeEntries: TimeTrackingItemTable[] = [];
 
-  weekDays: { label: string; date: Date }[] = [];
+  weekDays: TimeTrackingWeekDay[] = [];
 
   weekColumns = [
     { property: 'dom', label: 'Dom' },
@@ -95,7 +100,7 @@ export class TimeTrackingComponent {
   addTimeEntriesToTable(timeEntries: TimeEntry[]) {
     timeEntries.forEach((item) => {
       const indexProject = this.timeEntries.findIndex(
-        (i) => i.project.id === item.project.id
+        (i) => i.project.id === item.project!.id
       );
       const labelDate = this.weekDays.find((weekDay) =>
         DateUtils.isSameDate(weekDay.date, item.date)
@@ -103,12 +108,12 @@ export class TimeTrackingComponent {
 
       if (indexProject === -1) {
         this.timeEntries.push({
-          project: item.project,
-          [labelDate]: item.hours,
+          project: item.project!,
+          [labelDate]: item,
         });
       } else {
         Object.assign(this.timeEntries[indexProject], {
-          [labelDate]: item.hours,
+          [labelDate]: item,
         });
       }
     });
@@ -168,5 +173,51 @@ export class TimeTrackingComponent {
 
     this.timeEntries = [...projectsWithTimeEntries, ...newRows];
     this.table.renderRows();
+  }
+
+  onChangeTimeEntry(
+    element: TimeTrackingItemTable,
+    weekDay: TimeTrackingWeekDay,
+    event: Event
+  ) {
+    const input = event.target as HTMLInputElement;
+    const hours = parseFloat(input.value);
+
+    if (isNaN(hours) || hours < 0.1) {
+      input.value = '';
+      return;
+    }
+    
+    const dateString = DateUtils.dateToString(weekDay.date);
+
+    const labelDate = this.weekDays.find((weekDay) =>
+      DateUtils.isSameDate(weekDay.date, dateString)
+    )!.label;
+
+    Object.assign(element, { [labelDate]: hours });
+
+    const timeEntry: TimeEntry = {
+      id: element[weekDay.label as keyof typeof element]?.id,
+      idProject: element.project.id!,
+      date: dateString,
+      hours,
+      idUser: this.userService.loggedUser!.userId,
+    };
+
+    if (!timeEntry.id) {
+      this.addTimeEntry(timeEntry, element, weekDay);
+    }
+  }
+
+  addTimeEntry(
+    timeEntry: TimeEntry,
+    element: TimeTrackingItemTable,
+    weekDay: TimeTrackingWeekDay
+  ) {
+    this.timeEntryService.create(timeEntry).subscribe({
+      next: (res) => {
+        (element[weekDay.label as keyof typeof element] as TimeEntry) = res;
+      },
+    });
   }
 }

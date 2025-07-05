@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { timeEntrieController } from "../controllers/timeEntries/timeEntrieController";
+import { timeEntryController } from "../controllers/timeEntries/timeEntryController";
 
-const timeEntrieRouter = Router();
+const timeEntryRouter = Router();
 
-timeEntrieRouter.get("/", timeEntrieController.getTimeEntries);
+timeEntryRouter.get("/", timeEntryController.getTimeEntries);
+timeEntryRouter.post("/", timeEntryController.createTimeEntry);
 
-export default timeEntrieRouter;
+export default timeEntryRouter;

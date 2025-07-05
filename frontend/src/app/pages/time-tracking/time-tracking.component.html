@@ -27,7 +27,8 @@
           <input
             matInput
             type="number"
-            [value]="element[day.label]"
+            [value]="element[day.label]?.hours"
+            (change)="onChangeTimeEntry(element, day, $event)"
           />
         </mat-form-field>
       </td>

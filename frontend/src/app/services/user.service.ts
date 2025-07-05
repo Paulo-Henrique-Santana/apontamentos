@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { tap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-import { User, UserAuth, UserAuthResponse } from '../models/user';
+import { LoggedUser, User, UserAuth, UserAuthResponse } from '../models/user';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private http = inject(HttpClient);
@@ -18,11 +18,24 @@ export class UserService {
     return localStorage.getItem(this.keyAuthToken);
   }
 
+  get loggedUser(): LoggedUser | null {
+    const token = localStorage.getItem('token');
+
+    return token ? this.parseJwt(token) : null;
+  }
+
+  parseJwt(token: string) {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload));
+  }
+
   register(user: User) {
     return this.http.post<User>(this.url, user);
   }
 
   auth(body: UserAuth) {
-    return this.http.post<UserAuthResponse>(`${this.url}/auth`, body).pipe(tap(res => localStorage.setItem(this.keyAuthToken, res.token)));
+    return this.http
+      .post<UserAuthResponse>(`${this.url}/auth`, body)
+      .pipe(tap((res) => localStorage.setItem(this.keyAuthToken, res.token)));
   }
 }

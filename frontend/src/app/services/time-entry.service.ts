@@ -17,4 +17,8 @@ export class TimeEntryService {
       params: { ...params },
     });
   }
+
+  create(timeEntry: TimeEntry) {
+    return this.http.post<TimeEntry>(this.url, timeEntry);
+  }
 }

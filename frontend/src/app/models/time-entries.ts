@@ -4,12 +4,14 @@ import { User } from "./user";
 export interface TimeEntry {
   id?: number;
   date: string;
-  hours: string;
+  hours: number;
   observations?: string;
-  project: Project;
+  project?: Project;
   user?: User;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
+  idProject: number;
+  idUser: number;
 }
 
 export interface TimeEntryParams {
