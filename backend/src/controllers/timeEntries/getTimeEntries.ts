@@ -12,10 +12,8 @@ export const getTimeEntries = async (req: Request, res: Response) => {
 
     if (startDate && endDate) {
       where.date = {
-        [Op.between]: [
-          new Date(startDate as string),
-          new Date(endDate as string),
-        ],
+        [Op.gte]: startDate,
+        [Op.lte]: endDate,
       };
     }
 
@@ -24,7 +22,7 @@ export const getTimeEntries = async (req: Request, res: Response) => {
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [["id", "DESC"]],
-      include: [Project]
+      include: [Project],
     });
 
     return res.json({
