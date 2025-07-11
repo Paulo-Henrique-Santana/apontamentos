@@ -39,7 +39,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
     <tr class="no-data-row" *matNoDataRow>
-      <td class="cell-no-data">Nenhum projeto cadastrado</td>
+      <td class="cell-no-data" [attr.colspan]="displayedColumns.length">Nenhum apontamento cadastrado</td>
     </tr>
   </table>
 </div>
