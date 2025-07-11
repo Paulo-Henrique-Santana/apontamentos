@@ -190,12 +190,6 @@ export class TimeTrackingComponent {
     
     const dateString = DateUtils.dateToString(weekDay.date);
 
-    const labelDate = this.weekDays.find((weekDay) =>
-      DateUtils.isSameDate(weekDay.date, dateString)
-    )!.label;
-
-    Object.assign(element, { [labelDate]: hours });
-
     const timeEntry: TimeEntry = {
       id: element[weekDay.label as keyof typeof element]?.id,
       idProject: element.project.id!,
@@ -206,7 +200,10 @@ export class TimeTrackingComponent {
 
     if (!timeEntry.id) {
       this.addTimeEntry(timeEntry, element, weekDay);
+      return;
     }
+
+    this.updateTimeEntry(timeEntry, element, weekDay);
   }
 
   addTimeEntry(
@@ -215,6 +212,18 @@ export class TimeTrackingComponent {
     weekDay: TimeTrackingWeekDay
   ) {
     this.timeEntryService.create(timeEntry).subscribe({
+      next: (res) => {
+        (element[weekDay.label as keyof typeof element] as TimeEntry) = res;
+      },
+    });
+  }
+
+  updateTimeEntry(
+    timeEntry: TimeEntry,
+    element: TimeTrackingItemTable,
+    weekDay: TimeTrackingWeekDay
+  ) {
+    this.timeEntryService.update(timeEntry.id!, timeEntry).subscribe({
       next: (res) => {
         (element[weekDay.label as keyof typeof element] as TimeEntry) = res;
       },

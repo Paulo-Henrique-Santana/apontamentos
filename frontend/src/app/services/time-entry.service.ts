@@ -21,4 +21,8 @@ export class TimeEntryService {
   create(timeEntry: TimeEntry) {
     return this.http.post<TimeEntry>(this.url, timeEntry);
   }
+
+  update(id: number, timeEntry: TimeEntry) {
+    return this.http.put<TimeEntry>(`${this.url}/${id}`, timeEntry);
+  }
 }
