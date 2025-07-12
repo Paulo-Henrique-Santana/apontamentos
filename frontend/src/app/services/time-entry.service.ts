@@ -25,4 +25,8 @@ export class TimeEntryService {
   update(id: number, timeEntry: TimeEntry) {
     return this.http.put<TimeEntry>(`${this.url}/${id}`, timeEntry);
   }
+
+  delete(id: number) {
+    return this.http.delete<TimeEntry>(`${this.url}/${id}`);
+  }
 }

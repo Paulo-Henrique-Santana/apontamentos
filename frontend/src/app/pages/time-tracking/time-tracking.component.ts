@@ -182,16 +182,22 @@ export class TimeTrackingComponent {
   ) {
     const input = event.target as HTMLInputElement;
     const hours = parseFloat(input.value);
+    const id = element[weekDay.label as keyof typeof element]?.id;
 
-    if (isNaN(hours) || hours < 0.1) {
+    if (!hours && id) {
+      this.deleteTimeEntry(id, element, weekDay);
+      return;
+    }
+
+    if (!hours) {
       input.value = '';
       return;
     }
-    
+
     const dateString = DateUtils.dateToString(weekDay.date);
 
     const timeEntry: TimeEntry = {
-      id: element[weekDay.label as keyof typeof element]?.id,
+      id,
       idProject: element.project.id!,
       date: dateString,
       hours,
@@ -227,6 +233,19 @@ export class TimeTrackingComponent {
       next: (res) => {
         (element[weekDay.label as keyof typeof element] as TimeEntry) = res;
       },
+    });
+  }
+
+  deleteTimeEntry(
+    id: number,
+    element: TimeTrackingItemTable,
+    weekDay: TimeTrackingWeekDay
+  ) {
+    this.timeEntryService.delete(id).subscribe({
+      next: () => {
+        delete element[weekDay.label as keyof typeof element];
+        this.table.renderRows();
+      }
     });
   }
 }
