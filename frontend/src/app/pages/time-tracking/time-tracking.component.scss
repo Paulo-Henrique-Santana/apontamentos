@@ -16,13 +16,31 @@
   margin-bottom: 0.5rem;
 }
 
-mat-form-field {
-  width: 75px;
+.container-column-time-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 
-  margin-top: 1rem;
+  mat-form-field {
+    width: 70px;
 
-  input {
-    text-align: center;
-    font-weight: 500;
+    margin-top: 1rem;
+
+    input {
+      text-align: center;
+      font-weight: 500;
+    }
+  }
+
+  .observations {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 10px;
+
+    mat-icon {
+      font-size: 1.45rem;
+      transform: scaleX(-1);
+    }
   }
 }

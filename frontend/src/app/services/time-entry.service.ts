@@ -22,7 +22,7 @@ export class TimeEntryService {
     return this.http.post<TimeEntry>(this.url, timeEntry);
   }
 
-  update(id: number, timeEntry: TimeEntry) {
+  update(id: number, timeEntry: Partial<TimeEntry>) {
     return this.http.put<TimeEntry>(`${this.url}/${id}`, timeEntry);
   }
 

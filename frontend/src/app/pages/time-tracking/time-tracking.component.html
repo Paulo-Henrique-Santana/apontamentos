@@ -8,7 +8,14 @@
       (today)="currentWeek()"
     ></app-date-control>
 
-    <button mat-fab extended class="btn-add-project" (click)="openSelectProjectsDialog()">Selecionar projeto</button>
+    <button
+      mat-fab
+      extended
+      class="btn-add-project"
+      (click)="openSelectProjectsDialog()"
+    >
+      Selecionar projeto
+    </button>
   </div>
 
   <table mat-table [dataSource]="timeEntries">
@@ -23,14 +30,24 @@
         {{ weekColumns[$index].label }} {{ day.date | date : "dd/MM" }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <mat-form-field>
-          <input
-            matInput
-            type="number"
-            [value]="element[day.label]?.hours"
-            (change)="onChangeTimeEntry(element, day, $event)"
-          />
-        </mat-form-field>
+        <div class="container-column-time-entry">
+          <mat-form-field>
+            <input
+              matInput
+              type="number"
+              [value]="element[day.label]?.hours"
+              (change)="onChangeTimeEntry(element, day, $event)"
+            />
+          </mat-form-field>
+          <button
+            class="observations"
+            mat-mini-fab
+            [disabled]="!element[day.label]?.hours"
+            (click)="openModalObservations(element[day.label])"
+          >
+            <mat-icon>{{ element[day.label]?.observations ? 'comment' : 'add_comment'}}</mat-icon>
+          </button>
+        </div>
       </td>
     </ng-container>
     }
@@ -39,7 +56,9 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
     <tr class="no-data-row" *matNoDataRow>
-      <td class="cell-no-data" [attr.colspan]="displayedColumns.length">Nenhum apontamento cadastrado</td>
+      <td class="cell-no-data" [attr.colspan]="displayedColumns.length">
+        Nenhum apontamento cadastrado
+      </td>
     </tr>
   </table>
 </div>

@@ -2,13 +2,14 @@ import { DatePipe } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { DateControlComponent } from '../../components/date-control/date-control.component';
 import { DialogSelectProjectComponent } from '../../components/dialog-select-project/dialog-select-project.component';
+import { DialogTimeEntryObservationsComponent } from '../../components/dialog-time-entry-observations/dialog-time-entry-observations.component';
 import { Project } from '../../models/project';
 import { TimeEntry, TimeEntryParams } from '../../models/time-entries';
 import {
@@ -29,7 +30,7 @@ import { DateUtils } from '../../utils/date-utils';
     DatePipe,
     MatInputModule,
     DateControlComponent,
-    FormsModule,
+    FormsModule
   ],
   templateUrl: './time-tracking.component.html',
   styleUrl: './time-tracking.component.scss',
@@ -219,7 +220,10 @@ export class TimeTrackingComponent {
   ) {
     this.timeEntryService.create(timeEntry).subscribe({
       next: (res) => {
-        (element[weekDay.label as keyof typeof element] as TimeEntry) = res;
+        (element[weekDay.label as keyof typeof element] as TimeEntry) = {
+          ...res,
+          project: element.project,
+        };
       },
     });
   }
@@ -245,7 +249,32 @@ export class TimeTrackingComponent {
       next: () => {
         delete element[weekDay.label as keyof typeof element];
         this.table.renderRows();
-      }
+      },
+    });
+  }
+
+  openModalObservations(timeEntry: TimeEntry) {
+    const dialogRef = this.dialog.open(DialogTimeEntryObservationsComponent, {
+      data: {
+        projectName: timeEntry.project!.name,
+        date: timeEntry.date,
+        observations: timeEntry.observations,
+      },
+      width: '500px',
+    });
+
+    this.onCloseModalObservations(dialogRef, timeEntry);
+  }
+
+  onCloseModalObservations(dialogRef: MatDialogRef<DialogTimeEntryObservationsComponent>, timeEntry: TimeEntry) {
+    dialogRef.afterClosed().subscribe((observations: any) => {
+      if (typeof observations !== 'string') return;
+      
+      this.timeEntryService.update(timeEntry.id!, { observations }).subscribe({
+        next: (res) => {
+          timeEntry.observations = res.observations;
+        }
+      });
     });
   }
 }

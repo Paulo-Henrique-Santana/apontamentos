@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>{{ data.projectName }} — {{ weekDay }} {{ data.date | date : "dd/MM" }}</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Observações</mat-label>
+    <textarea matInput [(ngModel)]="observations"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button
+    mat-button
+    [mat-dialog-close]="observations"
+  >
+    Salvar
+  </button>
+</mat-dialog-actions>
