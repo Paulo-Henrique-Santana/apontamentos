@@ -56,6 +56,7 @@ export class TimeTrackingComponent {
     { property: 'sab', label: 'Sáb' },
   ];
   displayedColumns: string[] = ['project'];
+  isCurrentWeek = false;
 
   get weekProperties() {
     return this.weekColumns.map((column) => column.property);
@@ -64,6 +65,7 @@ export class TimeTrackingComponent {
   constructor() {
     this.weekDays = this.getWeekDays(new Date());
     this.displayedColumns = [...this.displayedColumns, ...this.weekProperties];
+    this.updateIsCurrentWeek();
     this.getTimeEntries();
   }
 
@@ -142,7 +144,17 @@ export class TimeTrackingComponent {
   changeWeek(date: Date) {
     this.weekDays = this.getWeekDays(date);
     this.timeEntries = [];
+    this.updateIsCurrentWeek();
     this.getTimeEntries();
+  }
+
+  updateIsCurrentWeek() {
+    const today = new Date();
+    const firstDay = this.weekDays[0].date;
+    const lastDay = this.weekDays[6].date;
+    this.isCurrentWeek =
+      today >= new Date(firstDay.setHours(0, 0, 0, 0)) &&
+      today <= new Date(lastDay.setHours(23, 59, 59, 999));
   }
 
   openSelectProjectsDialog() {

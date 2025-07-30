@@ -6,6 +6,7 @@
       (next)="nextWeek()"
       (previous)="lastWeek()"
       (today)="currentWeek()"
+      [disabledToday]="isCurrentWeek"
     ></app-date-control>
 
     <button
