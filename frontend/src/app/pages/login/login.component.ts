@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
 import { FieldErrorComponent } from '../../components/field-error/field-error.component';
+import { SnackBarComponent } from '../../components/snack-bar/snack-bar.component';
+import { SnackBarData, SnackBarType } from '../../models/snack-bar';
 import { UserAuth } from '../../models/user';
 import { UserService } from '../../services/user.service';
 
@@ -21,7 +23,7 @@ import { UserService } from '../../services/user.service';
     MatButtonModule,
     ReactiveFormsModule,
     FieldErrorComponent,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -49,8 +51,13 @@ export class LoginComponent {
     if (this.form.valid) {
       this.userSerivce.auth(this.form.value as UserAuth).subscribe({
         next: () => {
-          this.snackBar.open('Login efetuado com sucesso!', 'Fechar', {
-            duration: 5000,
+          const data: SnackBarData = {
+            message: 'Login efetuado com sucesso!',
+            type: SnackBarType.SUCCESS,
+          };
+
+          this.snackBar.openFromComponent(SnackBarComponent, {
+            data,
           });
 
           this.router.navigate(['/projetos']);

@@ -7,8 +7,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { DialogDeleteProjectComponent } from '../../components/dialog-delete-project/dialog-delete-project.component';
 import { DialogFormProjectComponent } from '../../components/dialog-form-project/dialog-form-project.component';
+import { SnackBarComponent } from '../../components/snack-bar/snack-bar.component';
 import { DialogFormProjectData } from '../../models/dialog-form-project-data';
 import { Project } from '../../models/project';
+import { SnackBarType } from '../../models/snack-bar';
 import { ProjectService } from '../../services/project.service';
 
 @Component({
@@ -53,8 +55,11 @@ export class ProjectsComponent implements OnInit {
       next: () => {
         this.projects = this.projects.filter((p) => p.id !== project.id);
 
-        this.snackBar.open('Projeto deletado com sucesso!', 'Fechar', {
-          duration: 5000,
+        this.snackBar.openFromComponent(SnackBarComponent, {
+          data: {
+            message: 'Projeto deletado com sucesso!',
+            type: SnackBarType.SUCCESS,
+          },
         });
       },
     });
@@ -82,8 +87,11 @@ export class ProjectsComponent implements OnInit {
         this.projects.unshift(res);
         this.table.renderRows();
 
-        this.snackBar.open('Projeto cadastrado com sucesso!', 'Fechar', {
-          duration: 5000,
+        this.snackBar.openFromComponent(SnackBarComponent, {
+          data: {
+            message: 'Projeto cadastrado com sucesso!',
+            type: SnackBarType.SUCCESS,
+          },
         });
       },
     });
@@ -113,8 +121,11 @@ export class ProjectsComponent implements OnInit {
         this.projects[index] = res;
         this.table.renderRows();
 
-        this.snackBar.open('Projeto editado com sucesso!', 'Fechar', {
-          duration: 5000,
+        this.snackBar.openFromComponent(SnackBarComponent, {
+          data: {
+            message: 'Projeto editado com sucesso!',
+            type: SnackBarType.SUCCESS,
+          },
         });
       },
     });

@@ -1,0 +1,39 @@
+@use "@angular/material" as mat;
+
+$error-color: #f44336;
+$success-color: #28a745;
+
+:host {
+  display: flex;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  &.error > mat-icon {
+    color: $error-color;
+  }
+  &.success > mat-icon {
+    color: $success-color;
+  }
+}
+
+.button-close {
+  &.error {
+    @include mat.snack-bar-overrides(
+      (
+        button-color: $error-color,
+      )
+    );
+  }
+
+  &.success {
+    @include mat.snack-bar-overrides(
+      (
+        button-color: $success-color,
+      )
+    );
+  }
+}

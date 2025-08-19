@@ -14,6 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { FieldErrorComponent } from '../../components/field-error/field-error.component';
+import { SnackBarComponent } from '../../components/snack-bar/snack-bar.component';
+import { SnackBarType } from '../../models/snack-bar';
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 
@@ -77,8 +79,11 @@ export class RegisterUserComponent {
     if (this.form.valid) {
       this.userSerivce.register(this.form.value as User).subscribe({
         next: () => {
-          this.snackBar.open('Usuário cadastrado com sucesso!', 'Fechar', {
-            duration: 5000,
+          this.snackBar.openFromComponent(SnackBarComponent, {
+            data: {
+              message: 'Usuário cadastrado com sucesso!',
+              type: SnackBarType.SUCCESS,
+            }
           });
 
           this.router.navigate(['/login']);

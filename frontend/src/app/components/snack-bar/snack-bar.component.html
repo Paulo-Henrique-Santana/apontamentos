@@ -1,0 +1,14 @@
+<span class="label" [ngClass]="data.type" matSnackBarLabel>
+  <mat-icon [fontIcon]="iconsMessage[data.type]"></mat-icon>{{ data.message }}
+</span>
+<span matSnackBarActions>
+  <button
+    mat-button
+    matSnackBarAction
+    class="button-close"
+    [ngClass]="data.type"
+    (click)="snackBarRef.dismissWithAction()"
+  >
+    Fechar
+  </button>
+</span>
