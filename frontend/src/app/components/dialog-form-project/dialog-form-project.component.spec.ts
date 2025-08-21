@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogFormProjectComponent } from './dialog-form-project.component';
 
 describe('DialogFormProjectComponent', () => {
@@ -8,7 +9,10 @@ describe('DialogFormProjectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DialogFormProjectComponent]
+      imports: [DialogFormProjectComponent],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+      ]
     })
     .compileComponents();
 

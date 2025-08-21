@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TimeEntryService } from '../../services/time-entry.service';
 import { TimeTrackingComponent } from './time-tracking.component';
 
 describe('TimeTrackingComponent', () => {
@@ -8,9 +11,13 @@ describe('TimeTrackingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TimeTrackingComponent]
-    })
-    .compileComponents();
+      imports: [TimeTrackingComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        TimeEntryService,
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TimeTrackingComponent);
     component = fixture.componentInstance;
