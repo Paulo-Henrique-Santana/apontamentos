@@ -2,13 +2,13 @@ import { Project } from './project';
 import { TimeEntry } from './time-entries';
 
 export interface TimeTrackingItemTable {
-  Dom?: TimeEntry;
-  Seg?: TimeEntry;
-  Ter?: TimeEntry;
-  Qua?: TimeEntry;
-  Qui?: TimeEntry;
-  Sex?: TimeEntry;
-  Sáb?: TimeEntry;
+  dom?: TimeEntry;
+  seg?: TimeEntry;
+  ter?: TimeEntry;
+  qua?: TimeEntry;
+  qui?: TimeEntry;
+  sex?: TimeEntry;
+  sab?: TimeEntry;
   project: Project;
 }
 

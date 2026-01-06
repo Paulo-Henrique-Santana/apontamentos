@@ -37,6 +37,10 @@ export class AppComponent {
   ];
 
   constructor() {
+    this.initToolbarVisibilityListener();
+  }
+
+  initToolbarVisibilityListener() {
     this.router.events
       .pipe(filter((event) => event instanceof ActivationStart))
       .subscribe((event) => {

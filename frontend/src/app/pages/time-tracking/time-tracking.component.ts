@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -35,7 +35,7 @@ import { DateUtils } from '../../utils/date-utils';
   templateUrl: './time-tracking.component.html',
   styleUrl: './time-tracking.component.scss',
 })
-export class TimeTrackingComponent {
+export class TimeTrackingComponent implements OnInit{
   @ViewChild(MatTable) table!: MatTable<Project>;
 
   timeEntryService = inject(TimeEntryService);
@@ -62,7 +62,7 @@ export class TimeTrackingComponent {
     return this.weekColumns.map((column) => column.property);
   }
 
-  constructor() {
+  ngOnInit() {
     this.weekDays = this.getWeekDays(new Date());
     this.displayedColumns = [...this.displayedColumns, ...this.weekProperties];
     this.updateIsCurrentWeek();
@@ -289,4 +289,6 @@ export class TimeTrackingComponent {
       });
     });
   }
+
+
 }

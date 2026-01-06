@@ -27,6 +27,6 @@ export class TimeEntryService {
   }
 
   delete(id: number) {
-    return this.http.delete<TimeEntry>(`${this.url}/${id}`);
+    return this.http.delete<any>(`${this.url}/${id}`);
   }
 }

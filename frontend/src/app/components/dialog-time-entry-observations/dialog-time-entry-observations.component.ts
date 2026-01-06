@@ -36,7 +36,7 @@ export class DialogTimeEntryObservationsComponent {
     this.initObservations();
   }
 
-    get weekDay() {
+  get weekDay() {
     return DateUtils.getWeekdayAbbreviation(this.data.date);
   }
 

@@ -8,26 +8,27 @@ import { DialogTimeEntryObservationsComponent } from './dialog-time-entry-observ
 describe('DialogTimeEntryObservationsComponent', () => {
   let component: DialogTimeEntryObservationsComponent;
   let fixture: ComponentFixture<DialogTimeEntryObservationsComponent>;
-  
+  let dialogRefSpy: jasmine.SpyObj<
+    MatDialogRef<DialogTimeEntryObservationsComponent>
+  >;
+
   const dialogData: DialogTimeEntryObservations = {
     date: '2023-10-01',
     projectName: 'Test Project',
-  }
+  };
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close', 'afterOpened']);
+
+    dialogRefSpy.afterOpened.and.returnValue(of(void 0));
+
+    TestBed.configureTestingModule({
       imports: [DialogTimeEntryObservationsComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
-        {
-          provide: MatDialogRef,
-          useValue: {
-            afterOpened: () => of(void 0),
-            close: jasmine.createSpy('close'),
-          },
-        },
+        { provide: MatDialogRef, useValue: dialogRefSpy },
       ],
-    }).compileComponents();
+    });
 
     fixture = TestBed.createComponent(DialogTimeEntryObservationsComponent);
     component = fixture.componentInstance;
@@ -36,5 +37,10 @@ describe('DialogTimeEntryObservationsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('deve chamar dialogRef.close ao executar onCancel', () => {
+    component.onCancel();
+    expect(dialogRefSpy.close).toHaveBeenCalled();
   });
 });

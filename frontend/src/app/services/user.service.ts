@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { LoggedUser, User, UserAuth, UserAuthResponse } from '../models/user';
 
@@ -12,7 +12,7 @@ export class UserService {
 
   private url = `${environment.url}/users`;
 
-  readonly keyAuthToken = 'token';
+  private readonly keyAuthToken = 'token';
 
   get accessToken() {
     return localStorage.getItem(this.keyAuthToken);
@@ -24,12 +24,12 @@ export class UserService {
     return token ? this.parseJwt(token) : null;
   }
 
-  parseJwt(token: string) {
+  private parseJwt(token: string) {
     const payload = token.split('.')[1];
     return JSON.parse(atob(payload));
   }
 
-  register(user: User) {
+  register(user: User): Observable<User> {
     return this.http.post<User>(this.url, user);
   }
 

@@ -31,6 +31,10 @@ export class ProjectsComponent implements OnInit {
   displayedColumns: string[] = ['name', 'actions'];
 
   ngOnInit(): void {
+    this.getProjects();
+  }
+
+  getProjects() {
     this.projectsService.get().subscribe({
       next: (res) => {
         this.projects = res.items;
@@ -43,8 +47,8 @@ export class ProjectsComponent implements OnInit {
       data: project.name,
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
         this.deleteProject(project);
       }
     });
